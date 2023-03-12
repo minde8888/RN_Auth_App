@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "277866648441",
+    "project_id": "rnauthapp-d6278",
+    "storage_bucket": "rnauthapp-d6278.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:277866648441:android:da8282ff49732f342ed5a8",
+        "android_client_info": {
+          "package_name": "com.rn_auth_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "277866648441-7nvri7juu2bc3p6cv4e92ra0jkm5geah.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rn_auth_app",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "277866648441-rnninu0h8l6vb637fihskv32h8emsjl0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rn_auth_app",
+            "certificate_hash": "91c8cb2cdf3e6fe47a9ea5ecbcb4bec7b95e50cf"
+          }
+        },
+        {
+          "client_id": "277866648441-artsud3slcaflj9v7tkeeds2m15g2bc7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM1GjyBPMHru16FdLhDtYopE0atGw4U9w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "277866648441-artsud3slcaflj9v7tkeeds2m15g2bc7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
