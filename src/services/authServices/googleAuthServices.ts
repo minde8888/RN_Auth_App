@@ -30,7 +30,7 @@ export const googleLogin = async (
   try {
     const {data} = await api.post<Response>(AUTH_URL + 'google-login', {
       provider: provider,
-      idToken: idToken,
+      accessToken: idToken,
     });
     console.log(data);    
 

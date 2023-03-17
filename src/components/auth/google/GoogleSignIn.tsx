@@ -31,14 +31,9 @@ const GoogleSignIn = (): ReactElement => {
 
         try {
             const { idToken } = await GoogleSignin.signIn();
-            console.log("idToken :" + idToken);
-            // if (idToken) {
-            //     googleLogin(idToken, "google.com")
-            // }
-          
             const googleCredential = auth.GoogleAuthProvider.credential(idToken);
             googleLogin(googleCredential.providerId, googleCredential.token)
-            console.log(111, googleCredential);
+            // console.log(111, googleCredential);
             
             // const userCredential: FirebaseAuthTypes.UserCredential = await auth().signInWithCredential(googleCredential);
             // console.log(222, userCredential);
