@@ -6,21 +6,10 @@ import {ServerError} from '../typings';
 const AUTH_URL = 'Auth/';
 
 interface Response {
-  errors: string;
+  errors?: string;
   token: string;
   refreshToken: string;
   susses: boolean;
-  user: User;
-}
-
-interface User {
-  $id: string;
-  name: string;
-  surname: string;
-  email: string;
-  roles?: string;
-  phoneNumber: string;
-  imageName?: string;
 }
 
 export const googleLogin = async (

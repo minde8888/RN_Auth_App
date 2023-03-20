@@ -13,17 +13,6 @@ interface Response {
   token: string;
   refreshToken: string;
   susses: boolean;
-  user: User;
-}
-
-interface User {
-  $id: string;
-  name: string;
-  surname: string;
-  email: string;
-  roles?: string;
-  phoneNumber: string;
-  imageName?: string;
 }
 
 export const login = async (email: string, password: string): Promise<Response> => {
@@ -58,8 +47,7 @@ export const register = async (
   surname: string,
   mobile: string,
   email: string,
-  password: string,
-  role: string,
+  password: string
 ) => {
   try {
     return await api.post<AxiosResponse>(AUTH_URL + 'signup', {
@@ -67,8 +55,7 @@ export const register = async (
       surname: surname,
       phoneNumber: mobile,
       email: email,
-      password: password,
-      Roles: role,
+      password: password
     });
   } catch (error: any) {
     if (axios.isAxiosError(error)) {

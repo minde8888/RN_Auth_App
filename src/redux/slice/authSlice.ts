@@ -20,7 +20,7 @@ const authSlice = createSlice({
                 error: action.payload
             };
         },
-        loginSuccess: (state, { payload }: PayloadAction<AuthState>) => {
+        loginSuccess: (state, { payload }: PayloadAction<AuthState>) => {            
             return {
                 ...state,
                 isLoggedIn: true,

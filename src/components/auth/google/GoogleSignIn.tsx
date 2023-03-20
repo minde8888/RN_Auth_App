@@ -1,15 +1,17 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import type { ReactElement } from 'react';
 import {
     StyleSheet,
     Text,
     View,
 } from 'react-native';
-
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
 import React from 'react';
 import { googleLogin } from '../../../services/authServices/googleAuthServices';
+import { CLIENT_ID } from "@env"
+import { loginSuccess } from '../../../redux/slice/authSlice';
+import { useAppDispatch } from '../../../redux/store';
 
 interface User {
     displayName?: string | null;
@@ -19,11 +21,12 @@ interface User {
 }
 
 const GoogleSignIn = (): ReactElement => {
-    const [user, setUser] = useState<User | null>(null);
+
     const [isSigninInProgress, setIsSigninInProgress] = useState(false);
+    const dispatch = useAppDispatch();
 
     GoogleSignin.configure({
-        webClientId: '277866648441-artsud3slcaflj9v7tkeeds2m15g2bc7.apps.googleusercontent.com',
+        webClientId: CLIENT_ID,
     });
 
     const onGoogleButtonPress = async () => {
@@ -32,22 +35,9 @@ const GoogleSignIn = (): ReactElement => {
         try {
             const { idToken } = await GoogleSignin.signIn();
             const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-            googleLogin(googleCredential.providerId, googleCredential.token)
-            // console.log(111, googleCredential);
-            
-            // const userCredential: FirebaseAuthTypes.UserCredential = await auth().signInWithCredential(googleCredential);
-            // console.log(222, userCredential);
-            
-            // const firebaseUser: FirebaseAuthTypes.User | null = userCredential.user;
+            const data = await googleLogin(googleCredential.providerId, googleCredential.token)
+            dispatch(loginSuccess(data))
 
-            // if (firebaseUser) {
-            //     setUser({
-            //         email: firebaseUser.email,
-            //         photoURL: firebaseUser.photoURL,
-            //         displayName: firebaseUser.displayName,
-            //         idToken: idToken
-            //     });
-            // }
         } catch (error: any) {
             console.error('Error:', error);
 
