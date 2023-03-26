@@ -1,21 +1,23 @@
-/**
- * @format
- */
-
-import 'react-native';
 import React from 'react';
-import App from '../App';
-
-// Note: test renderer must be required after react-native.
 import { render } from '@testing-library/react-native';
-import { store } from '../src/redux/store';
 import { Provider } from 'react-redux';
 import { AuthProvider } from '../src/routes/context/AuthContext';
+import Routes from '../src/routes/Routes';
+import { store } from '../src/redux/store';
+import App from '../App';
 
-describe('<App />', () => {
-  test('renders without error', () => {
-    const { getByTestId } = render(<App />);
-    const appContainer = getByTestId('app-container');
-    expect(appContainer).toBeDefined();
-  });
+jest.mock('@react-native-firebase/auth', () => ({
+    credential: jest.fn().mockReturnValue('123'),
+}));
+
+jest.mock('../src/components/auth/google/GoogleSignIn', () => ({
+    __esModule: true,
+    default: () => <></>
+}))
+
+describe('App', () => {
+    test('renders correctly', () => {
+        const { toJSON } = render(<App />);
+        expect(toJSON()).toMatchSnapshot();
+      });
 });

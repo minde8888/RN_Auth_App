@@ -2,7 +2,6 @@ import { useState } from 'react';
 import type { ReactElement } from 'react';
 import {
     StyleSheet,
-    Text,
     View,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
@@ -12,13 +11,6 @@ import { googleLogin } from '../../../services/authServices/googleAuthServices';
 import { CLIENT_ID } from "@env"
 import { loginSuccess } from '../../../redux/slice/authSlice';
 import { useAppDispatch } from '../../../redux/store';
-
-interface User {
-    displayName?: string | null;
-    email?: string | null;
-    photoURL?: string | null;
-    idToken?: string | null;
-}
 
 const GoogleSignIn = (): ReactElement => {
 
@@ -40,7 +32,6 @@ const GoogleSignIn = (): ReactElement => {
 
         } catch (error: any) {
             console.error('Error:', error);
-
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 console.error('User cancelled the login flow');
             } else if (error.code === statusCodes.IN_PROGRESS) {
@@ -57,20 +48,14 @@ const GoogleSignIn = (): ReactElement => {
 
     return (
         <View>
-            {user ? (
-                <View>
-                    <Text>Email: {user.email}</Text>
-                    <Text>id Token: {user.idToken}</Text>
-                </View>
-            ) : (
-                <GoogleSigninButton
-                    style={styles.googleButton}
-                    size={GoogleSigninButton.Size.Wide}
-                    color={GoogleSigninButton.Color.Dark}
-                    onPress={onGoogleButtonPress}
-                    disabled={isSigninInProgress}
-                />
-            )}
+            <GoogleSigninButton
+                testID='google-signin-button'
+                style={styles.googleButton}
+                size={GoogleSigninButton.Size.Wide}
+                color={GoogleSigninButton.Color.Dark}
+                onPress={onGoogleButtonPress}
+                disabled={isSigninInProgress}
+            />
         </View>
     );
 }

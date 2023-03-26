@@ -10,8 +10,7 @@ import {
 import {
     useController,
     useFormContext,
-    UseControllerProps,
-    useWatch
+    UseControllerProps
 } from 'react-hook-form';
 import React from 'react';
 

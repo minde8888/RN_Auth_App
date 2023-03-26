@@ -2,6 +2,7 @@
   "compilerOptions": {
       "jsx": "react",
       "strict": true,
+      "module": "commonjs"
   },
   "extends": "@tsconfig/react-native/tsconfig.json",
   "typeRoots": ["./env.d.ts"]

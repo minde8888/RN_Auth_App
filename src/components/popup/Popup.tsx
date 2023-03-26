@@ -18,11 +18,11 @@ const Popup = ({ error, setFormErrors }: Props) => {
     };
 
     return visible ? (
-        <View style={styles.overlay}>
+        <View testID='overlay' style={styles.overlay}>
             <View style={styles.alert}>
                 <Text style={styles.message}>{error}</Text>
                 <TouchableOpacity onPress={hideAlert} style={styles.button}>
-                    <Text style={styles.buttonText}>Close</Text>
+                    <Text testID='close-button' style={styles.buttonText}>Close</Text>
                 </TouchableOpacity>
             </View>
         </View>

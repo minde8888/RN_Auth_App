@@ -72,6 +72,7 @@ const LoginScreen = () => {
                             message: 'Invalid email address'
                         }
                     }}
+                    accessibilityLabel="Email"
                 />
                 {renderError('email')}
                 <TextInput
@@ -86,11 +87,13 @@ const LoginScreen = () => {
                             message: 'Password must have 8 symbol one uppercase and one symbol (e.g. !)'
                         }
                     }}
+                    accessibilityLabel="Password"
                 />
                 {renderError('password')}
             </FormProvider>
             <View style={styles.button}>
                 <TouchableOpacity
+                    testID="login-button"
                     disabled={response !== undefined}
                     onPress={methods.handleSubmit(onSubmit, onError)}>
                     <Text>Login</Text>
@@ -102,8 +105,6 @@ const LoginScreen = () => {
         </View>
     );
 };
-
-
 
 const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({

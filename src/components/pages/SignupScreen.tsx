@@ -23,7 +23,6 @@ export interface ApiResponse {
     errors?: any;
 }
 
-
 const SignupScreen: React.FC = () => {
 
     const [formErrors, setFormErrors] = useState<FormErrors>({});
@@ -182,8 +181,6 @@ const SignupScreen: React.FC = () => {
         </View>
     );
 };
-
-
 
 const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({

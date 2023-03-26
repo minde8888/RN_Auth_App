@@ -5,13 +5,28 @@
  * @format
  */
 
-module.exports = {
-  transformer: {
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: true,
+const { getDefaultConfig } = require('metro-config');
+
+module.exports = async () => {
+  const {
+    resolver: { sourceExts },
+  } = await getDefaultConfig();
+
+  return {
+    transformer: {
+      getTransformOptions: async () => ({
+        transform: {
+          experimentalImportSupport: false,
+          inlineRequires: true,
+        },
+      }),
+    },
+    resolver: {
+      sourceExts: [...sourceExts, 'jsx', 'js', 'ts', 'tsx'], // add the appropriate extensions here
+      extraNodeModules: {
+        'react-native-gesture-handler': require.resolve('react-native-gesture-handler'),
       },
-    }),
-  },
+    },
+  };
 };
+
