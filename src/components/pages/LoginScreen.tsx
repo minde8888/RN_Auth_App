@@ -9,6 +9,8 @@ import GoogleSignIn from '../auth/google/GoogleSignIn';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { login } from '../../services/authServices/jwtAuthServices';
 import React from 'react';
+import { useContext } from 'react';
+import { AuthContext } from '../../routes/context/AuthContext';
 
 export type FormErrors = { email?: string, password?: string, errors?: string };
 
@@ -18,6 +20,7 @@ const LoginScreen = () => {
     const [formErrors, setFormErrors] = useState<FormErrors>({});
     const [response, setResponse] = useState<undefined | { status: string }>();
     const methods = useForm<FieldValues>({});
+    const { setIsAuth } = useContext(AuthContext);
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const auth = await login(data.email, data.password);
@@ -28,6 +31,7 @@ const LoginScreen = () => {
             };
             setFormErrors(errorMsg);
         } else {
+            setIsAuth(true);
             setFormErrors({});
             setResponse({ status: 'success' });
             methods.reset();

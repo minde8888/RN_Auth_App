@@ -3,7 +3,7 @@ import {userLogout} from '../../../src/redux/slice/authSlice';
 import {store} from '../../../src/redux/store';
 import api from '../../../src/services/apiServices/instanceApi';
 import AuthError from '../../../src/services/handleServerErrorServices/authError';
-import NetworkError from '../../../src/services/handleServerErrorServices/networkError.ts';
+import NetworkError from '../../../src/services/handleServerErrorServices/networkError';
 import {
   login,
   logout,
@@ -45,7 +45,7 @@ describe('Auth Services', () => {
       try {
         await login('email', 'password');
       } catch (error: any) {
-        expect(error.response.data.errors.$values[0]).toBe(
+        expect(error.message).toBe(
           'invalid credentials',
         );
       }
@@ -109,7 +109,7 @@ describe('Auth Services', () => {
       try {
         await register('name', 'surname', 'mobile', 'email', 'password');
       } catch (error: any) {
-        expect(error.response.data.errors.$values[0]).toBe(
+        expect(error.message).toBe(
           'email already exists',
         );
       }

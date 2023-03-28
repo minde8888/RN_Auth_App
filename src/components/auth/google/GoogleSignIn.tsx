@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import type { ReactElement } from 'react';
 import {
     StyleSheet,
@@ -6,16 +6,17 @@ import {
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
-import React from 'react';
 import { googleLogin } from '../../../services/authServices/googleAuthServices';
 import { CLIENT_ID } from "@env"
 import { loginSuccess } from '../../../redux/slice/authSlice';
 import { useAppDispatch } from '../../../redux/store';
+import { AuthContext } from '../../../routes/context/AuthContext';
 
 const GoogleSignIn = (): ReactElement => {
 
     const [isSigninInProgress, setIsSigninInProgress] = useState(false);
     const dispatch = useAppDispatch();
+    const { setIsAuth } = useContext(AuthContext);
 
     GoogleSignin.configure({
         webClientId: CLIENT_ID,
@@ -29,7 +30,7 @@ const GoogleSignIn = (): ReactElement => {
             const googleCredential = auth.GoogleAuthProvider.credential(idToken);
             const data = await googleLogin(googleCredential.providerId, googleCredential.token)
             dispatch(loginSuccess(data))
-
+            setIsAuth(true);
         } catch (error: any) {
             console.error('Error:', error);
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {

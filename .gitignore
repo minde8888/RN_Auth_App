@@ -64,4 +64,6 @@ yarn-error.log
 
 package.json
 yarn.lock
+package-lock.json
 
+.env

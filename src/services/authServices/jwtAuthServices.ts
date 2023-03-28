@@ -1,10 +1,9 @@
-import axios, {AxiosError, AxiosResponse} from 'axios';
+import  { AxiosResponse} from 'axios';
 import {store} from '../../redux/store';
 import {userLogout} from '../../redux/slice/authSlice';
 import api from '../apiServices/instanceApi';
-import {ServerError} from '../typings';
 import AuthError from '../handleServerErrorServices/authError';
-import RegisterError from '../handleServerErrorServices/registerError';
+import NetworkError from '../handleServerErrorServices/networkError';
 
 const AUTH_URL = 'Auth/';
 
@@ -15,7 +14,10 @@ interface Response {
   susses: boolean;
 }
 
-export const login = async (email: string, password: string): Promise<Response> => {
+export const login = async (
+  email: string,
+  password: string,
+): Promise<Response> => {
   try {
     const {data} = await api.post<Response>(AUTH_URL + 'login', {
       email: email,
@@ -27,14 +29,16 @@ export const login = async (email: string, password: string): Promise<Response> 
     }
     return {...data, errors: data.errors ? data.errors[0] : ''};
   } catch (error: any) {
-    if (axios.isAxiosError(error)) {
-      const serverError = error as AxiosError<ServerError>;
-      if (serverError && serverError.response?.data) {
-        throw new AuthError(serverError.response.data.errors.$values[0]);
-      }
-      throw new AuthError(error.message);
+    if (error instanceof NetworkError) {
+      throw new AuthError(
+        'Unable to reach server. Please check your internet connection and try again.',
+      );
+    } else if (error.response?.data?.errors?.$values) {
+      const errorMessage = error.response.data.errors.$values[0];
+      throw new AuthError(errorMessage);
+    } else {
+      throw new AuthError('An unknown error has occurred.');
     }
-    throw error;
   }
 };
 
@@ -47,7 +51,7 @@ export const register = async (
   surname: string,
   mobile: string,
   email: string,
-  password: string
+  password: string,
 ) => {
   try {
     return await api.post<AxiosResponse>(AUTH_URL + 'signup', {
@@ -55,16 +59,15 @@ export const register = async (
       surname: surname,
       phoneNumber: mobile,
       email: email,
-      password: password
+      password: password,
     });
   } catch (error: any) {
-    if (axios.isAxiosError(error)) {
-      const serverError = error as AxiosError<ServerError>;
-      if (serverError && serverError.response) {
-        throw new AuthError(serverError.response.data.errors.$values[0]);
-      }
-      throw new AuthError(error.message);
+    if (error instanceof NetworkError) {
+      throw new AuthError(
+        'Unable to reach server. Please check your internet connection and try again.',
+      );
+    } else {
+      throw new AuthError(error.response.data.errors.$values.join(', '));
     }
-    throw error;
   }
 };
