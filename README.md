@@ -30,4 +30,5 @@ Implementing JWT Refresh Token Authentication: The app uses JWT refresh tokens t
 Testing and Deployment: The app was tested on both iOS and Android platforms. The app was deployed to the app stores using the appropriate tools and processes.
 
 #Conclusion:
+
 This React Native app with Google OAuth 2.0 and JWT refresh token authentication is a robust and secure mobile application. The app allows users to sign up and log in with ease and provides a seamless experience for its users.
