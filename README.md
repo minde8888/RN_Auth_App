@@ -1,8 +1,6 @@
 # RN_Auth_App
 # Project Title: React Native App with Google OAuth 2.0 and JWT Refresh Token Authentication
 
-Foobar is a Python library for dealing with word pluralization.
-
 ## Technologies Used:
 
 React Native CLI TypeScript Overview: This project is a mobile application developed using React Native CLI and TypeScript. The app has implemented authentication features using Google OAuth 2.0 and a JWT refresh token for login and sign up functionalities on the frontend.
