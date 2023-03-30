@@ -1,5 +1,5 @@
 import TextInput from '../textInput/TextInput';
-import { View, StyleSheet, Text, Platform, Dimensions } from 'react-native';
+import { View, StyleSheet, Text, Platform, Dimensions, Button } from 'react-native';
 import { useForm, FormProvider, SubmitHandler, SubmitErrorHandler, FieldValues } from 'react-hook-form';
 import { useState } from 'react';
 import { useAppDispatch } from '../../redux/store';
@@ -11,10 +11,16 @@ import { login } from '../../services/authServices/jwtAuthServices';
 import React from 'react';
 import { useContext } from 'react';
 import { AuthContext } from '../../routes/context/AuthContext';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../routes/RootStackParamList';
 
 export type FormErrors = { email?: string, password?: string, errors?: string };
 
-const LoginScreen = () => {
+type Props = {
+    navigation: StackNavigationProp<RootStackParamList, 'LoginScreen'>;
+}
+
+const LoginScreen = ({ navigation }: Props) => {
 
     const dispatch = useAppDispatch();
     const [formErrors, setFormErrors] = useState<FormErrors>({});
@@ -95,16 +101,26 @@ const LoginScreen = () => {
                 />
                 {renderError('password')}
             </FormProvider>
-            <View style={styles.button}>
-                <TouchableOpacity
-                    testID="login-button"
-                    disabled={response !== undefined}
-                    onPress={methods.handleSubmit(onSubmit, onError)}>
-                    <Text>Login</Text>
-                </TouchableOpacity>
-            </View>
-            <View>
-                <GoogleSignIn />
+            <View style={styles.container}>
+                <View style={styles.button}>
+                    <TouchableOpacity
+                        testID="login-button"
+                        disabled={response !== undefined}
+                        onPress={methods.handleSubmit(onSubmit, onError)}>
+                        <Text style={styles.buttonText}>Login</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <TouchableOpacity
+                        testID="signup-button"
+                        onPress={() => navigation.navigate('Signup')}
+                        style={styles.createAccountButton}>
+                        <Text style={styles.buttonText}>Create Account</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <GoogleSignIn />
+                </View>
             </View>
         </View>
     );
@@ -125,7 +141,6 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        justifyContent: 'center',
         padding: 32,
         backgroundColor: '#0e101c',
         width: '100%',
@@ -149,7 +164,23 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
         fontSize: 16,
-    }
+    },
+    createAccountButton: {
+        height: 56,
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 12,
+        width: screenWidth >= 768 ? '50%' : '100%',
+        alignSelf: screenWidth >= 768 ? 'center' : 'flex-start',
+        borderWidth: 1,
+        borderColor: '#fff',
+    },
+    createAccountButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
 });
 
 export default LoginScreen;

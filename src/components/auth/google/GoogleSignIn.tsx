@@ -1,6 +1,8 @@
+import React from 'react';
 import { useContext, useState } from 'react';
 import type { ReactElement } from 'react';
 import {
+    Dimensions,
     StyleSheet,
     View,
 } from 'react-native';
@@ -48,7 +50,7 @@ const GoogleSignIn = (): ReactElement => {
     };
 
     return (
-        <View>
+        <View style={styles.buttonContainer}>
             <GoogleSigninButton
                 testID='google-signin-button'
                 style={styles.googleButton}
@@ -61,11 +63,21 @@ const GoogleSignIn = (): ReactElement => {
     );
 }
 
+const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
+    buttonContainer: {
+        height: 56,
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 24,
+        width: screenWidth >= 768 ? '50%' : '100%',
+        alignSelf: screenWidth >= 768 ? 'center' : 'flex-start',
+    },
     googleButton: {
-        width: 192,
-        height: 48,
-        alignSelf: 'center',
+        height: 58,
+        width:'100%',
+        alignSelf: 'stretch',
         marginBottom: 24,
     },
 });

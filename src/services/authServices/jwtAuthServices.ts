@@ -53,6 +53,7 @@ export const register = async (
   email: string,
   password: string,
 ) => {
+  
   try {
     return await api.post<AxiosResponse>(AUTH_URL + 'signup', {
       name: name,
@@ -67,6 +68,8 @@ export const register = async (
         'Unable to reach server. Please check your internet connection and try again.',
       );
     } else {
+      console.log(error);
+      
       throw new AuthError(error.response.data.errors.$values.join(', '));
     }
   }
