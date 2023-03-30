@@ -3,7 +3,23 @@
 
 ## Technologies Used:
 
-React Native CLI TypeScript Overview: This project is a mobile application developed using React Native CLI and TypeScript. The app has implemented authentication features using Google OAuth 2.0 and a JWT refresh token for login and sign up functionalities on the frontend.
+- React Native CLI: A command line interface tool that enables building and deploying React Native applications.
+
+- TypeScript: A programming language that adds static typing to JavaScript, making code more predictable and easier to maintain.
+
+- Google OAuth 2.0: A standard protocol that provides secure authorization to access user data from various Google services.
+
+- JWT refresh token: A method of using JSON Web Tokens to authenticate and refresh a user's login session.
+
+- React Redux: A state management library that facilitates managing the state of the React components.
+
+- Firebase: A mobile and web application development platform that offers a suite of services such as database, storage, and authentication.
+
+- Jest: A JavaScript testing framework that provides a fast and comprehensive way to test React components.
+
+- Clean Code Architecture: A software design pattern that promotes writing clean, maintainable code.
+
+By using these technologies, the React Native CLI TypeScript project provides an easy-to-use mobile application with robust authentication features, efficient state management, and reliable testing. The project leverages Firebase's services to manage data and offers an overall scalable and maintainable codebase. The use of TypeScript adds an extra layer of type safety, making the codebase more predictable and reducing potential errors.
 
 ## Features:
 
