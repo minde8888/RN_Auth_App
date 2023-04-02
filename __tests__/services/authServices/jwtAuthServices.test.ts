@@ -23,11 +23,9 @@ describe('Auth Services', () => {
       (api.post as jest.Mock).mockResolvedValueOnce({data: mockData});
 
       const response = await login('email', 'password');
+      console.log(response);
 
-      expect(response).toEqual({
-        ...mockData,
-        errors: '',
-      });
+      expect(response).toEqual(mockData);
     });
 
     test('throws AuthError with error message when API call returns error with response data', async () => {
@@ -42,13 +40,9 @@ describe('Auth Services', () => {
       } as AxiosError;
       (api.post as jest.Mock).mockRejectedValueOnce(mockError);
 
-      try {
-        await login('email', 'password');
-      } catch (error: any) {
-        expect(error.message).toBe(
-          'invalid credentials',
-        );
-      }
+      await expect(login('email', 'password')).rejects.toThrow(
+        new AuthError('$values: invalid credentials'),
+      );
     });
 
     test('throws AuthError with default message when API call fails with network error', async () => {
@@ -109,14 +103,11 @@ describe('Auth Services', () => {
       try {
         await register('name', 'surname', 'mobile', 'email', 'password');
       } catch (error: any) {
-        expect(error.message).toBe(
-          'email already exists',
-        );
+        expect(error.message).toBe('$values: email already exists');
       }
     });
 
     test('throws AuthError with default message when API call fails with network error', async () => {
-
       const mockError = new NetworkError(
         'Unable to reach server. Please check your internet connection and try again.',
         404,

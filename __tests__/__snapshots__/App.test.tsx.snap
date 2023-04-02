@@ -332,7 +332,6 @@ exports[`App renders correctly 1`] = `
                           {
                             "backgroundColor": "#0e101c",
                             "flex": 1,
-                            "justifyContent": "center",
                             "padding": 32,
                             "width": "100%",
                           }
@@ -446,48 +445,115 @@ exports[`App renders correctly 1`] = `
                         <View
                           style={
                             {
-                              "alignItems": "center",
-                              "alignSelf": "flex-start",
-                              "backgroundColor": "#f194ff",
-                              "borderRadius": 8,
-                              "height": 56,
-                              "justifyContent": "center",
-                              "marginTop": 24,
+                              "backgroundColor": "#0e101c",
+                              "flex": 1,
+                              "padding": 32,
                               "width": "100%",
                             }
                           }
                         >
-                          <RNGestureHandlerButton
-                            collapsable={false}
-                            delayLongPress={600}
-                            enabled={true}
-                            exclusive={true}
-                            handlerTag={2}
-                            handlerType="NativeViewGestureHandler"
-                            onGestureEvent={[Function]}
-                            onGestureHandlerEvent={[Function]}
-                            onGestureHandlerStateChange={[Function]}
-                            onHandlerStateChange={[Function]}
-                            rippleColor={0}
-                            testID="login-button"
-                            touchSoundDisabled={false}
-                          >
-                            <View
-                              accessible={true}
-                              collapsable={false}
-                              style={
-                                {
-                                  "opacity": 1,
-                                }
+                          <View
+                            style={
+                              {
+                                "alignItems": "center",
+                                "alignSelf": "flex-start",
+                                "backgroundColor": "#f194ff",
+                                "borderRadius": 8,
+                                "height": 56,
+                                "justifyContent": "center",
+                                "marginTop": 24,
+                                "width": "100%",
                               }
+                            }
+                          >
+                            <RNGestureHandlerButton
+                              collapsable={false}
+                              delayLongPress={600}
+                              enabled={true}
+                              exclusive={true}
+                              handlerTag={2}
+                              handlerType="NativeViewGestureHandler"
+                              onGestureEvent={[Function]}
+                              onGestureHandlerEvent={[Function]}
+                              onGestureHandlerStateChange={[Function]}
+                              onHandlerStateChange={[Function]}
+                              rippleColor={0}
+                              testID="login-button"
+                              touchSoundDisabled={false}
                             >
-                              <Text>
-                                Login
-                              </Text>
-                            </View>
-                          </RNGestureHandlerButton>
+                              <View
+                                accessible={true}
+                                collapsable={false}
+                                style={
+                                  {
+                                    "opacity": 1,
+                                  }
+                                }
+                              >
+                                <Text
+                                  style={
+                                    {
+                                      "color": "#fff",
+                                      "fontSize": 16,
+                                      "fontWeight": "bold",
+                                    }
+                                  }
+                                >
+                                  Login
+                                </Text>
+                              </View>
+                            </RNGestureHandlerButton>
+                          </View>
+                          <View>
+                            <RNGestureHandlerButton
+                              collapsable={false}
+                              delayLongPress={600}
+                              enabled={true}
+                              exclusive={true}
+                              handlerTag={3}
+                              handlerType="NativeViewGestureHandler"
+                              onGestureEvent={[Function]}
+                              onGestureHandlerEvent={[Function]}
+                              onGestureHandlerStateChange={[Function]}
+                              onHandlerStateChange={[Function]}
+                              rippleColor={0}
+                              testID="signup-button"
+                              touchSoundDisabled={false}
+                            >
+                              <View
+                                accessible={true}
+                                collapsable={false}
+                                style={
+                                  {
+                                    "alignItems": "center",
+                                    "alignSelf": "flex-start",
+                                    "borderColor": "#fff",
+                                    "borderRadius": 8,
+                                    "borderWidth": 1,
+                                    "height": 56,
+                                    "justifyContent": "center",
+                                    "marginTop": 12,
+                                    "opacity": 1,
+                                    "width": "100%",
+                                  }
+                                }
+                              >
+                                <Text
+                                  style={
+                                    {
+                                      "color": "#fff",
+                                      "fontSize": 16,
+                                      "fontWeight": "bold",
+                                    }
+                                  }
+                                >
+                                  Create Account
+                                </Text>
+                              </View>
+                            </RNGestureHandlerButton>
+                          </View>
+                          <View />
                         </View>
-                        <View />
                       </View>
                     </View>
                   </View>

@@ -1,18 +1,36 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import Popup from '../../src/components/popup/Popup';
-import { ReactTestInstance } from 'react-test-renderer';
+import Popup, { Props } from '../../src/components/popup/Popup';
 
-describe('Popup component', () => {
-    test('should hide the popup when closed', () => {
-        const setFormErrors = jest.fn();
-        const { queryByTestId } = render(<Popup error="Error message" setFormErrors={setFormErrors} />);
+jest.mock('react-native-modal', () => 'Modal');
 
-        const closeButton = queryByTestId('close-button') as ReactTestInstance;
-        fireEvent.press(closeButton);
+describe('Popup', () => {
+  const defaultProps: Props = {
+    error: 'Test error',
+    togglePopup: jest.fn(),
+    popupVisible: true,
+  };
 
-        const overlay = queryByTestId('overlay');
-        expect(overlay).toBeNull();
-        expect(setFormErrors).toHaveBeenCalledWith({ errors: '' });
-    });
+  test('renders correctly with default props', () => {
+    const { getByTestId, getByText } = render(
+      <Popup {...defaultProps} />
+    );
+    expect(getByTestId('overlay')).toBeTruthy();
+    expect(getByText('Test error')).toBeTruthy();
+    expect(getByText('Close')).toBeTruthy();
+  });
+
+  test('calls togglePopup function when close button is pressed', () => {
+    const togglePopup = jest.fn();
+    const { getByTestId } = render(
+      <Popup {...defaultProps} togglePopup={togglePopup} />
+    );
+    const closeButton = getByTestId('close-button');
+    fireEvent.press(closeButton);
+    expect(togglePopup).toHaveBeenCalled();
+  });
 });
+
+
+
+

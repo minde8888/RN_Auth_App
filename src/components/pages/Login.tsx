@@ -1,7 +1,7 @@
 import TextInput from '../textInput/TextInput';
-import { View, StyleSheet, Text, Platform, Dimensions, Button } from 'react-native';
+import { View, StyleSheet, Text, Platform, Dimensions } from 'react-native';
 import { useForm, FormProvider, SubmitHandler, SubmitErrorHandler, FieldValues } from 'react-hook-form';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useAppDispatch } from '../../redux/store';
 import { loginSuccess } from '../../redux/slice/authSlice';
 import Popup from '../popup/Popup';
@@ -13,34 +13,48 @@ import { useContext } from 'react';
 import { AuthContext } from '../../routes/context/AuthContext';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../routes/RootStackParamList';
+import { ApiResponse } from '../../services/typings';
 
 export type FormErrors = { email?: string, password?: string, errors?: string };
 
 type Props = {
-    navigation: StackNavigationProp<RootStackParamList, 'LoginScreen'>;
+    navigation: StackNavigationProp<RootStackParamList, 'Login'>;
 }
 
-const LoginScreen = ({ navigation }: Props) => {
+const Login = ({ navigation }: Props) => {
 
     const dispatch = useAppDispatch();
     const [formErrors, setFormErrors] = useState<FormErrors>({});
     const [response, setResponse] = useState<undefined | { status: string }>();
     const methods = useForm<FieldValues>({});
     const { setIsAuth } = useContext(AuthContext);
+    const [popupVisible, setPopupVisible] = useState(true);
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        const auth = await login(data.email, data.password);
-        dispatch(loginSuccess(auth))
-        if (auth.errors) {
+        try {
+            const response = await login(data.email, data.password);
+            console.log(response);
+            const apiResponse: ApiResponse = response.data;
+
+            if (apiResponse.errors) {
+                setPopupVisible(true)
+                const errorMsg: FormErrors = {
+                    errors: apiResponse.errors
+                };
+                setFormErrors(errorMsg);
+            } else {
+                dispatch(loginSuccess(response))
+                setFormErrors({});
+                setResponse({ status: 'success' });
+                setIsAuth(true);
+                methods.reset();
+            }
+        } catch (error : any) {
             const errorMsg: FormErrors = {
-                errors: auth.errors
+                errors: error.toString().split("Error: ")[1]
             };
+            setPopupVisible(true)
             setFormErrors(errorMsg);
-        } else {
-            setIsAuth(true);
-            setFormErrors({});
-            setResponse({ status: 'success' });
-            methods.reset();
         }
     };
 
@@ -61,6 +75,11 @@ const LoginScreen = ({ navigation }: Props) => {
         return null;
     };
 
+    const togglePopup = useCallback(() => {
+        setPopupVisible(!popupVisible);
+        setFormErrors({});
+    }, []);
+
     return (
         <View style={styles.container}>
             <View style={styles.login}>
@@ -69,7 +88,14 @@ const LoginScreen = ({ navigation }: Props) => {
                 </View>
             </View>
             <FormProvider {...methods}>
-                {formErrors.errors && <Text style={styles.errorMessage}>{<Popup error={formErrors.errors} setFormErrors={setFormErrors} />}</Text>}
+                {formErrors.errors && (
+                    <Text style={styles.errorMessage}>
+                        <Popup
+                            error={formErrors.errors}
+                            togglePopup={togglePopup}
+                            popupVisible={popupVisible} />
+                    </Text>
+                )}
                 <TextInput
                     name="email"
                     label="Email"
@@ -183,4 +209,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default LoginScreen;
+export default Login;

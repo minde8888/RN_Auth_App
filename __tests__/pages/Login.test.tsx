@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, waitFor } from '@testing-library/react-native';
 import { renderWithContext } from '../../context/renderWithContext';
-import LoginScreen from '../../src/components/pages/LoginScreen';
+import Login from '../../src/components/pages/Login';
 
 jest.mock('@react-native-firebase/auth', () => ({
   credential: jest.fn().mockReturnValue('123'),
@@ -12,9 +12,17 @@ jest.mock('../../src/components/auth/google/GoogleSignIn', () => ({
   default: () => <></>
 }))
 
-describe('LoginScreen', () => {
+jest.mock('../../src/components/popup/Popup', () => ({
+  __esModule: true,
+  default: () => <></>
+}))
+
+const navigation: any = { navigate: jest.fn() };
+
+describe('Login', () => {
+
   test('renderWithContexts correctly', () => {
-    const { getByLabelText, getByTestId } = renderWithContext(<LoginScreen />);
+    const { getByLabelText, getByTestId } = renderWithContext(<Login navigation={navigation} />);
 
     const emailInput = getByLabelText('Email');
     expect(emailInput).toBeTruthy();
@@ -27,7 +35,7 @@ describe('LoginScreen', () => {
   });
 
   test('displays error message for invalid email input', async () => {
-    const { getByLabelText, getByTestId, getByText } = renderWithContext(<LoginScreen />);
+    const { getByLabelText, getByTestId, getByText } = renderWithContext(<Login navigation={navigation} />);
     const emailInput = getByLabelText('Email');
     const passwordInput = getByLabelText('Password');
     const loginButton = getByTestId('login-button');
@@ -41,7 +49,7 @@ describe('LoginScreen', () => {
   });
 
   test('displays error message for invalid password input', async () => {
-    const { getByLabelText, getByText, getByTestId } = renderWithContext(<LoginScreen />);
+    const { getByLabelText, getByText, getByTestId } = renderWithContext(<Login navigation={navigation} />);
     const emailInput = getByLabelText('Email');
     const passwordInput = getByLabelText('Password');
     const loginButton = getByTestId('login-button');

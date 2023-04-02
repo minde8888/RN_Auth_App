@@ -1,13 +1,15 @@
-import  { AxiosResponse} from 'axios';
+import {AxiosResponse} from 'axios';
 import {store} from '../../redux/store';
 import {userLogout} from '../../redux/slice/authSlice';
 import api from '../apiServices/instanceApi';
 import AuthError from '../handleServerErrorServices/authError';
 import NetworkError from '../handleServerErrorServices/networkError';
+import {ApiResponse} from '../typings';
 
 const AUTH_URL = 'Auth/';
 
 interface Response {
+  data: ApiResponse;
   errors: string;
   token: string;
   refreshToken: string;
@@ -27,18 +29,32 @@ export const login = async (
     if (!(Object.keys(data).length !== 0)) {
       throw new AuthError('no user found');
     }
-    return {...data, errors: data.errors ? data.errors[0] : ''};
+    return {...data};
   } catch (error: any) {
     if (error instanceof NetworkError) {
       throw new AuthError(
         'Unable to reach server. Please check your internet connection and try again.',
       );
-    } else if (error.response?.data?.errors?.$values) {
-      const errorMessage = error.response.data.errors.$values[0];
-      throw new AuthError(errorMessage);
-    } else {
-      throw new AuthError('An unknown error has occurred.');
     }
+
+    const {data} = error.response;
+
+    if (data.errors) {
+      const errorMessages = Object.entries(data.errors).flatMap(
+        ([fieldName, errors]: [string, unknown]) =>
+          (errors as string[]).map(
+            (errorMessage: string) => `${fieldName}: ${errorMessage}`,
+          ),
+      );
+      throw new AuthError(errorMessages.join('; '));
+    }
+
+    if (data.Message) {
+      const errorMessages = `${data.Message} Code:  ${data.Reason}`;
+      throw new AuthError(errorMessages);
+    }
+
+    throw new AuthError(`An unknown error occurred. ${error.message}`);
   }
 };
 
@@ -53,7 +69,6 @@ export const register = async (
   email: string,
   password: string,
 ) => {
-  
   try {
     return await api.post<AxiosResponse>(AUTH_URL + 'signup', {
       name: name,
@@ -61,16 +76,32 @@ export const register = async (
       phoneNumber: mobile,
       email: email,
       password: password,
+      roles: 'Basic',
     });
   } catch (error: any) {
     if (error instanceof NetworkError) {
       throw new AuthError(
         'Unable to reach server. Please check your internet connection and try again.',
       );
-    } else {
-      console.log(error);
-      
-      throw new AuthError(error.response.data.errors.$values.join(', '));
     }
+
+    const {data} = error.response;
+
+    if (data.errors) {
+      const errorMessages = Object.entries(data.errors).flatMap(
+        ([fieldName, errors]: [string, unknown]) =>
+          (errors as string[]).map(
+            (errorMessage: string) => `${fieldName}: ${errorMessage}`,
+          ),
+      );
+      throw new AuthError(errorMessages.join('; '));
+    }
+
+    if (data.Message) {
+      const errorMessages = `${data.Message} Code:  ${data.Reason}`;
+      throw new AuthError(errorMessages);
+    }
+
+    throw new AuthError(`An unknown error occurred. ${error.message}`);
   }
 };

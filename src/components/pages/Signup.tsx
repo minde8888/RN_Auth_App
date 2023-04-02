@@ -1,13 +1,14 @@
 import TextInput from '../textInput/TextInput';
 import { View, StyleSheet, Text, Platform, Dimensions, Button, ScrollView } from 'react-native';
 import { useForm, FormProvider, SubmitHandler, SubmitErrorHandler, FieldValues } from 'react-hook-form';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Popup from '../popup/Popup';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { register } from '../../services/authServices/jwtAuthServices';
 import React from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../routes/RootStackParamList';
+import { ApiResponse } from '../../services/typings';
 
 export type FormErrors = {
     name?: string;
@@ -18,13 +19,6 @@ export type FormErrors = {
     errors?: string
 };
 
-export interface ApiResponse {
-    status: string | number;
-    message?: string;
-    data?: any;
-    errors?: any;
-}
-
 type Props = {
     navigation: StackNavigationProp<RootStackParamList, 'Signup'>;
 }
@@ -34,6 +28,7 @@ const Signup = ({ navigation }: Props) => {
     const [formErrors, setFormErrors] = useState<FormErrors>({});
     const [response, setResponse] = useState<undefined | { status: string }>();
     const methods = useForm<FieldValues>({});
+    const [popupVisible, setPopupVisible] = useState(true);
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         try {
@@ -46,6 +41,7 @@ const Signup = ({ navigation }: Props) => {
             );
             const apiResponse: ApiResponse = response.data;
             if (apiResponse.errors) {
+                setPopupVisible(true)
                 const errorMsg: FormErrors = {
                     errors: apiResponse.errors
                 };
@@ -55,8 +51,12 @@ const Signup = ({ navigation }: Props) => {
                 setResponse({ status: 'success' });
                 methods.reset();
             }
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            const errorMsg: FormErrors = {
+                errors: error.toString().split("Error: ")[1]
+            };
+            setPopupVisible(true)
+            setFormErrors(errorMsg);
         }
     };
 
@@ -72,7 +72,7 @@ const Signup = ({ navigation }: Props) => {
     };
 
     const nameRegex = /^[A-Za-z]+$/;
-    const mobileRegex = /^(\+|\d)[0-9]{7,16}$/;
+    const mobileRegex = /^(\+?\d{1,3}|\d{8,16})$/;
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
 
@@ -83,9 +83,16 @@ const Signup = ({ navigation }: Props) => {
         return null;
     };
 
-    if (response?.status === "success") {
-        navigation.navigate('LoginScreen')
-    }
+    useEffect(() => {
+        if (response?.status === "success") {
+            navigation.navigate('Login')
+        }
+    }, [response?.status]);
+
+    const togglePopup = useCallback(() => {
+        setPopupVisible(!popupVisible);
+        setFormErrors({});
+    }, []);
 
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -93,10 +100,14 @@ const Signup = ({ navigation }: Props) => {
                 <FormProvider {...methods}>
                     {formErrors.errors && (
                         <Text style={styles.errorMessage}>
-                            <Popup error={formErrors.errors} setFormErrors={setFormErrors} />
+                            <Popup
+                                error={formErrors.errors}
+                                togglePopup={togglePopup}
+                                popupVisible={popupVisible} />
                         </Text>
                     )}
                     <TextInput
+                        testID="name-input"
                         name="name"
                         label="Name"
                         placeholder="Name"
@@ -111,6 +122,7 @@ const Signup = ({ navigation }: Props) => {
                     />
                     {renderError('name')}
                     <TextInput
+                        testID='surname-input'
                         name="surname"
                         label="Surname"
                         placeholder="Surname"
@@ -125,6 +137,7 @@ const Signup = ({ navigation }: Props) => {
                     />
                     {renderError('surname')}
                     <TextInput
+                        testID='mobile-input'
                         name="mobile"
                         label="Mobile"
                         placeholder="Mobile"
@@ -138,6 +151,7 @@ const Signup = ({ navigation }: Props) => {
                     />
                     {renderError('mobile')}
                     <TextInput
+                        testID='email-input'
                         name="email"
                         label="Email"
                         placeholder="email@example.com"
@@ -152,6 +166,7 @@ const Signup = ({ navigation }: Props) => {
                     />
                     {renderError('email')}
                     <TextInput
+                        testID='password-input'
                         name="password"
                         label="Password"
                         placeholder="********"
@@ -166,6 +181,7 @@ const Signup = ({ navigation }: Props) => {
                     />
                     {renderError('password')}
                     <TextInput
+                        testID='invalid-password'
                         name="confirmPassword"
                         label="Confirm Password"
                         placeholder="********"
@@ -181,7 +197,7 @@ const Signup = ({ navigation }: Props) => {
                     <TouchableOpacity
                         disabled={response !== undefined}
                         onPress={methods.handleSubmit(onSubmit, onError)}>
-                        <Text style={styles.buttonText}>Signup</Text>
+                        <Text testID='submit-button' style={styles.buttonText}>Signup</Text>
                     </TouchableOpacity>
                 </View>
             </View>
